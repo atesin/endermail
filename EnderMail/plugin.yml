@@ -1,0 +1,12 @@
+name: EnderMail
+main: cl.netgamer.endermail.Main
+version: 1.194
+
+commands:
+  mail:
+     description: "Check and send mail, more info: /mail help"
+     aliases: [m]
+  donothing:
+    description: useless command used by EnderMail to supress some messages
+    
+depend: [AuthMe]
