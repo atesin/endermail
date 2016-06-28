@@ -77,10 +77,10 @@ public class ItemSender
 		
 		// actually try to send the item
 		String itemName = held.getType()+" x"+held.getAmount();
-		System.out.println("HELD #"+held+"#");
+		//System.out.println("HELD #"+held+"#");
 		Map<Integer, ItemStack> remain = reciever.getEnderChest().addItem(held);
 		//reciever.updateInventory();
-		System.out.println("REMAIN #"+remain+"#");
+		//System.out.println("REMAIN #"+remain+"#");
 		if (remain.size() != 0)
 		{
 			//itemName = "\u00A7Ddestination enderchest full";

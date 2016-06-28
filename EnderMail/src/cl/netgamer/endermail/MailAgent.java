@@ -91,8 +91,6 @@ public class MailAgent
 	// the only method that searches users in authme table
 	private void validate(CommandSender sender, String recipients, String subject, String quote)
 	{
-		System.out.println("recipients = "+recipients);
-		
 		// pre-compose ..  check recipients, find recipients
 		Statement sta = db.newStatement();
 		String rcpt = "";

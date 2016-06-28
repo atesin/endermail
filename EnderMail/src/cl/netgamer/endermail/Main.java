@@ -19,7 +19,6 @@ public final class Main extends JavaPlugin implements Listener
 	public void onEnable()
 	{
 		ma = new MailAgent(this);
-		System.out.println("world class: "+getServer().getWorld("world").getClass().getName());
 	}
 	
 	// EXECUTE COMMANDS
