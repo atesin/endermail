@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 /**
 <pre>
-@version 1
+@version 2
 @author atesin#gmail,com
 
 
@@ -24,6 +24,10 @@ FEATURES
   More info: <a>http://minecraft.gamepedia.com/Formatting_codes</a>.
 - Includes a static method to send json messages delimited by grave accents, see below
 - Table convertion supports described text links, considering just printable part
+
+RECENT CHANGES
+
+- Minor syntax fixes
 
 USAGE:
 
@@ -145,7 +149,7 @@ public class TablePrinter
 	} */
 
 	// get pages according specified height
-	int countPages(String text)
+	int countLines(String text)
 	{
 		return (int) Math.ceil((double) (StringUtils.countMatches(text, "\n") + 1) / height);
 	}
@@ -161,7 +165,7 @@ public class TablePrinter
 	{
 		// previous tasks
 		lines = text.split("[\r\n]+");
-		pages = countPages(text);
+		pages = countLines(text);
 		forConsole = !(sender instanceof Player);
 		
 		// define lines range
