@@ -124,6 +124,7 @@ public final class Main extends JavaPlugin implements Listener
 	{
 		if (sender instanceof Player)
 		{
+			// use eye distance instead
 			Location loc = ((Player) sender).getLocation();
 			Location xx = loc.clone().add(-5, -5, -5);
 			Location yy;
