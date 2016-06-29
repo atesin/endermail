@@ -18,6 +18,7 @@ public final class Main extends JavaPlugin implements Listener
 	
 	public void onEnable()
 	{
+		saveDefaultConfig();
 		ma = new MailAgent(this);
 	}
 	
