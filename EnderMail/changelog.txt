@@ -1,0 +1,14 @@
+v4 (planned release)
+
+- use eye position instead feet position to calculate enderchest distance
+- add a command to undo last line in compose mode (suggested: z)
+
+v3 (current release)
+
+- fixed compatibility across minecraft versions
+- fixed save default config (sorry)
+- minor syntax fixes 
+
+v1.194
+
+- initial release, for minecraft 1.9.4 for now (lot of things changed)
