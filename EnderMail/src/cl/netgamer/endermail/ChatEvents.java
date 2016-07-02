@@ -27,7 +27,7 @@ public class ChatEvents implements Listener
 	public ChatEvents(Main main, MailAgent ma, int expire)
 	{
 		this.main = main;
-		is = new ItemSender();
+		is = new ItemSender(main);
 		main.getServer().getPluginManager().registerEvents(this, main);
 		this.expire = expire;
 		this.ma = ma;

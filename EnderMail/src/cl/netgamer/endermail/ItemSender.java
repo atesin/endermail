@@ -10,11 +10,13 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.mojang.authlib.GameProfile;
 
 public class ItemSender
 {
+	Main main = null;
 	Class<?> minecraftServerClass = null;
 	Class<?> worldClass = null;
 	Class<?> playerInteractManagerClass = null;
@@ -24,8 +26,9 @@ public class ItemSender
 	Object playerInteractManagerInstance = null;
 	Constructor<?> entityPlayerConstructor = null;
 	
-	public ItemSender()
+	public ItemSender(Main main)
 	{
+		this.main = main;
 		try
 		{
 			String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
@@ -65,11 +68,11 @@ public class ItemSender
 			return "";
 		}
 		
-		// try to load (offline) player reciever
+		// try to load (offline) player receiver
 		OfflinePlayer offPlayer = Bukkit.getOfflinePlayer(recipient);
 		boolean online = offPlayer.isOnline();
-		Player reciever = loadPlayer(offPlayer);
-		if (reciever == null)
+		final Player receiver = loadPlayer(offPlayer);
+		if (receiver == null)
 		{
 			sender.sendMessage("\u00A7Can't find destination enderchest.");
 			return "";
@@ -78,8 +81,8 @@ public class ItemSender
 		// actually try to send the item
 		String itemName = held.getType()+" x"+held.getAmount();
 		//System.out.println("HELD #"+held+"#");
-		Map<Integer, ItemStack> remain = reciever.getEnderChest().addItem(held);
-		//reciever.updateInventory();
+		Map<Integer, ItemStack> remain = receiver.getEnderChest().addItem(held);
+		//receiver.updateInventory();
 		//System.out.println("REMAIN #"+remain+"#");
 		if (remain.size() != 0)
 		{
@@ -90,11 +93,21 @@ public class ItemSender
 		else
 			giver.getInventory().setItemInMainHand(null);
 		
-		// clean things if reciever were offline
+		// clean things if receiver were offline
 		if (!online)
 		{
-			reciever.saveData();
-			reciever.kickPlayer("");
+			receiver.saveData();
+			System.out.println("player class = "+receiver.getClass().getName());
+			receiver.kickPlayer("");
+			
+			// this will kick loaded player in main thread
+			Bukkit.getScheduler().runTask(main, new Runnable()
+			{
+				public void run()
+				{
+					receiver.kickPlayer("");
+				}
+			});
 		}
 		sender.sendMessage("\u00A7BItem attached: "+itemName);
 		return itemName;

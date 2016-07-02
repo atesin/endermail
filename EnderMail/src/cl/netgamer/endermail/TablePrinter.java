@@ -143,6 +143,9 @@ public class TablePrinter
 			@Override
 			public int compare(String s1, String s2)
 			{
+				// sorting idea
+				// sort until find \t or `
+				// copy desired column in front, sort strings and delete front column
 				return s1.replaceAll("\u00A7.", "").compareTo(s2.replaceAll("\u00A7.", ""));
 			}
 		});

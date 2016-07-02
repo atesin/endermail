@@ -1,9 +1,14 @@
-v4 (planned release)
+v5 (planned release)
 
 - use eye position instead feet position to calculate enderchest distance
 - add a command to undo last line in compose mode (suggested: z)
 
-v3 (current release)
+v4 (current release)
+
+- fix kickPlayer bug in ItemSender
+- last release compatible with java 7
+
+v3
 
 - fixed compatibility across minecraft versions
 - fixed save default config (sorry)
