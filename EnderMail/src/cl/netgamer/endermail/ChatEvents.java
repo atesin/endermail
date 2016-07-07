@@ -63,7 +63,13 @@ public class ChatEvents implements Listener
 	void startDraft(CommandSender sender, String recipients, String subject, String quote)
 	{
 		// draft: from, rcpt, subj, quote, attachment, body lines...
-		TablePrinter.printRaw(sender, "Type your message,\t\u00A7B\u00A7L . `send with a single dot`.\t\u00A7E: send,\t\u00A7B + `attach held item and send`+\t\u00A7E: attach and send,\t\u00A7B c `cancel with a single 'c'`c\t\u00A7E: cancel");
+		//TablePrinter.printRaw(sender, "Type your message,\t\u00A7B\u00A7L . `send with a single dot`.\t\u00A7E: send,\t\u00A7B + `attach held item and send`+\t\u00A7E: attach and send,\t\u00A7B c `cancel with a single 'c'`c\t\u00A7E: cancel");
+		TablePrinter.printRaw(sender,
+			"\u00A7EType your message,\t"+
+			"\u00A7B\u00A7L . `send mail with a single dot`.\t\u00A7E: send,\t"+
+			"\u00A7B + `attach held item and send mail`+\t\u00A7E: attach,\t"+
+			"\u00A7B z `discard last line`+\t\u00A7E: undo,\t"+
+			"\u00A7B c `cancel and return to chat`c\t\u00A7E: cancel");
 		List<String> body = new ArrayList<String>();
 		body.add(sender instanceof Player ? sender.getName() : "ADMIN");
 		body.add(recipients);
@@ -84,7 +90,6 @@ public class ChatEvents implements Listener
 		// schedule new draft deletion task
 		cleanDraftsTasks.put(user, new BukkitRunnable()
 		{
-			
 			@Override
 			public void run()
 			{
@@ -104,28 +109,41 @@ public class ChatEvents implements Listener
 		if (!drafts.containsKey(user))
 			return false;
 		
-		if (line.matches("^(\\.|\\+|c|C)$"))
+		if (line.matches("^(\\.|\\+|c|C|z|Z)$"))
 		{
-			// message will end so let's delete draft task manually anyway
+			List<String> draft = null;
+			
+			if (!line.equalsIgnoreCase("c"))
+			{
+				// draft: from, rcpt, subj, quote, attachment, body lines...
+				draft = drafts.get(user);
+				
+				// undo (discard) last line and return not exit composing yet
+				if (line.equalsIgnoreCase("z"))
+				{
+					if (draft.size() > 5)
+					{
+						draft.remove(draft.size()-1);
+						sender.sendMessage("\u00A7E(Last line discarded)");
+					}
+					return true;
+				}
+				
+				if (line.equals("+"))
+					draft.set(4, is.sendItem(sender, draft.get(1)));
+				
+				// send message anyway
+			}	
+			
+			// delete scheduled removal task, draft itself, and deliver message
 			if (cleanDraftsTasks.containsKey(user))
 			{
 				cleanDraftsTasks.get(user).cancel();
 				cleanDraftsTasks.remove(user);
 			}
-			
-			// draft: from, rcpt, subj, quote, attachment, body lines...
-			List<String> draft = null;
-			if (line.equals("."))
-				draft = drafts.get(user);
-			if (line.equals("+"))
-			{
-				draft = drafts.get(user);
-				draft.set(4, is.sendItem(sender, draft.get(1)));
-			}
-			
 			drafts.remove(user);
 			sender.sendMessage(ma.deliver(draft));
-			//ma.viewFolder(sender, "back");
+			//ma.viewFolder(sender, "..");
 			return true;
 		}
 		

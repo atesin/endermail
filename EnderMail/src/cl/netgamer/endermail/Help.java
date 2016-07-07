@@ -21,10 +21,11 @@ public class Help
 		case "4":
 			TablePrinter.printRaw(sender,
 				"\u00A7ECompose mode :\n"+
-				"\u00A7FCapture chat input to emulate a line editor.\n"+
+				"\u00A7FCapture and redirect chat input to emulate a text editor,\n"+
 				"\u00A7FExit with one of these single line commands :\n"+
 				"\u00A7B\u00A7L. \t\u00A7F: Send your message\n"+
 				"\u00A7B+ \t\u00A7F: Attach held item and send message\n"+
+			    "\u00A7Bz \t\u00A7F: Undo (discard) last entered line and continue\n"+
 			    "\u00A7Bc \t\u00A7F: Cancel the operation\n"+
 			    "\u00A7F* Attachments are sent to [offline] player enderchest\n"+
 				"\u00A7EMenu : \t"+

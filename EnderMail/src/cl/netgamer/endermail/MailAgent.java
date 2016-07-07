@@ -71,7 +71,7 @@ public class MailAgent
 		// insufficient parameters
 		if (args.length < 2)
 		{
-			sender.sendMessage("\u00A7DInsufficient arguments: /mail send to1,to2...");
+			sender.sendMessage("\u00A7DInsufficient arguments: /mail sendmail recipients [subject]");
 			return;
 		}
 		
@@ -81,9 +81,10 @@ public class MailAgent
 			for (int i = 2; i < args.length; ++i)
 				subj += " "+args[i];
 		else
-			subj = "(no subject)";
+			subj = " (no subject)";
 		
 		// jump to recipients validation
+		sender.sendMessage("\u00A7ESend mail to "+ args[1]+", subject:"+subj);
 		validate(sender, args[1], subj.trim(), "");
 	}
 	
@@ -468,6 +469,7 @@ public class MailAgent
 		}
 		db.closeStatement(sta);
 		
+		sender.sendMessage("\u00A7EForward mail to "+ args[1]+", subject: "+subject);
 		validate(sender, args[1], subject, quote);
 	}
 	
@@ -511,7 +513,9 @@ public class MailAgent
 		}
 		db.closeStatement(sta);
 		
-		validate(sender, recipients.replaceAll(","+user+"(,|$)", "$1"), subj, quote);
+		recipients = recipients.replaceAll(","+user+"(,|$)", "$1");
+		sender.sendMessage("\u00A7EReply mail to "+ recipients+", subject: "+subj);
+		validate(sender, recipients, subj, quote);
 	}
 	
 	/**

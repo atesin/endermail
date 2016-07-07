@@ -1,6 +1,6 @@
 name: EnderMail
 main: cl.netgamer.endermail.Main
-version: 4
+version: 6
 
 commands:
   mail:

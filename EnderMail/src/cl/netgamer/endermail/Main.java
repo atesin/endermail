@@ -54,7 +54,7 @@ public final class Main extends JavaPlugin implements Listener
 		// check mail
 		if (arg.equals("check"))
 		{
-			ma.check(sender, (args.length > 1 && !args[1].equalsIgnoreCase("quiet")));
+			ma.check(sender, (args.length > 1 && args[1].equalsIgnoreCase("quiet")));
 			return true;
 		}
 		
@@ -125,7 +125,7 @@ public final class Main extends JavaPlugin implements Listener
 		if (sender instanceof Player)
 		{
 			// use eye distance instead
-			Location loc = ((Player) sender).getLocation();
+			Location loc = ((Player) sender).getEyeLocation();
 			Location xx = loc.clone().add(-5, -5, -5);
 			Location yy;
 			Location zz;

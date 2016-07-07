@@ -32,29 +32,8 @@
 # 
 # A message to the server admin (my colleague)
 # 
-# hi, when i installed my server and play with my friends i missed 2 things:
-# 
-# 1 - a way to send items to the distance:
-# sometimes i was crafting or building something and asked somebody for materials
-# and they said me "yes i am plenty of <material>"
-# so i answered "great!, can you give me some?"
-# and they told me "sure, but i am busy now and i am at <30 kilometers far>"
-# that is for i installed mailitems, but now it seems outdated
-# 
-# 2 - a way to send offline messages:
-# my server is friend based, has a low population and everybody knows each other,
-# sometimes i was exploring and found some material i remembered a friend needed
-# so i felt bad because i could not tell him because he was offline
-# so i searched for some mail plugins, but none satisfied me
-# 
-# so instead of still searching some decent plugins, i decided to write my own and share with you
-# 
-# i tried to make this plugin the most fiendly and intuitive possible, mostly are inspired on linux mail and sendmail commands.
-# after weeks breaking my head i finally found a decent way to make text links, a huge interface improvement
-# but since maybe you don't have a mouse, all subcommands can also be typed (full or just uppercases, ie.: ReplyAll -> ra)
-# 
-# that all for now, i hope you enjoy this plugin and contact me at project page if have some bug report or suggestion
-# thanks for using this plugin and happy crafting
+# hi, i hope you enjoy this plugin and contact me at project page http://dev.bukkit.org/bukkit-plugins/endermail/
+# if have some bug report or suggestion, thanks for using this plugin and happy crafting
 # 
 
 

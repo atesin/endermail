@@ -97,9 +97,11 @@ public class ItemSender
 		if (!online)
 		{
 			receiver.saveData();
-			System.out.println("player class = "+receiver.getClass().getName());
-			receiver.kickPlayer("");
+			//receiver.kickPlayer("");
 			
+			// some posts recommend this to avoid "async player kick exception"
+			// seems to throws with never logged in players in craftbukkit running instance
+			// prints "+" in chat, maybe letting player loaded
 			// this will kick loaded player in main thread
 			Bukkit.getScheduler().runTask(main, new Runnable()
 			{
@@ -109,7 +111,7 @@ public class ItemSender
 				}
 			});
 		}
-		sender.sendMessage("\u00A7BItem attached: "+itemName);
+		sender.sendMessage("\u00A7BItem stack attached: "+itemName);
 		return itemName;
 	}
 	

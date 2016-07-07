@@ -1,9 +1,19 @@
-v5 (planned release)
+v7 (development)
+
+v6 (latest release)
+
+- minor changes and interface dialog additions
+- fix "async player kick exception" bug that prints a "+" sign when sending attachments
+- fix undo past first line bug
+
+v5
 
 - use eye position instead feet position to calculate enderchest distance
-- add a command to undo last line in compose mode (suggested: z)
+- add a command to undo last line in compose mode (z)
+- fix quiet new mail check on login
+- dropped java 7 support
 
-v4 (current release)
+v4
 
 - fix kickPlayer bug in ItemSender
 - last release compatible with java 7
