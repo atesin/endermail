@@ -29,25 +29,37 @@
 # 	`id` INT UNSIGNED NOT NULL)
 # COLLATE='latin1_swedish_ci' ENGINE=InnoDB;
 # 
-# 
-# A message to the server admin (my colleague)
-# 
-# hi, i hope you enjoy this plugin and contact me at project page http://dev.bukkit.org/bukkit-plugins/endermail/
-# if have some bug report or suggestion, thanks for using this plugin and happy crafting
-# 
 
 
-# edit these configurations copying from AuthMe config.yml
+# edit these configurations copying them from AuthMe config.yml
 DataSource:
   mySQLHost: localhost
   mySQLPort: 3306
-  mySQLDatabase: database
-  mySQLUsername: dbuser
-  mySQLPassword: dbpass
-  mySQLTablename: table
+  mySQLDatabase: authme
+  mySQLUsername: authme
+  mySQLPassword: 12345
+  mySQLTablename: authme
   mySQLRealName: playername
   mySQLColumnLastLogin: lastlogin
+
 
 # ticks in which plugin will remember last folder, message or entered line,
 # for browsing, viewing and composing (default 2400 = 2min)
 expire: 2400
+
+
+# welcome message, from admin to new players with no messages in any folder (some folders cannot be emptied)
+# available variable: %P = new player, requires the forceCommands configuration specified on top to work
+welcomeMessage:
+  # if not enabled this entire section will be skipped
+  enabled: false
+  # optional single server console command triggered before sending welcome message
+  # examples: op %P, "give %P diamond_block 64", say Welcome %P!, otherPlugin someParameter
+  executeCommand: 
+  # short message subject
+  subject: Welcome to our server
+  # message body, for correct visualization try not to exceed 9 lines and 53 chars by line
+  body: |
+    Hi %P, welcome to our server.
+    Enjoy to play but respecting the rules,
+    please visit our web page, thanks.

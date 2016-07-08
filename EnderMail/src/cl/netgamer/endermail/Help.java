@@ -24,10 +24,10 @@ public class Help
 				"\u00A7FCapture and redirect chat input to emulate a text editor,\n"+
 				"\u00A7FExit with one of these single line commands :\n"+
 				"\u00A7B\u00A7L. \t\u00A7F: Send your message\n"+
-				"\u00A7B+ \t\u00A7F: Attach held item and send message\n"+
+				"\u00A7B+ \t\u00A7F: Attach held item and send message *\n"+
 			    "\u00A7Bz \t\u00A7F: Undo (discard) last entered line and continue\n"+
 			    "\u00A7Bc \t\u00A7F: Cancel the operation\n"+
-			    "\u00A7F* Attachments are sent to [offline] player enderchest\n"+
+			    "\u00A7F* Attachments goes to [offline] player enderchest\n"+
 				"\u00A7EMenu : \t"+
 				"\u00A7B<<`first page`/mail help 1\t\u00A7B < `previous page`/mail help 3\t"+
 				"\u00A7E4/4\t"+
@@ -52,7 +52,7 @@ public class Help
 				"\u00A7ESubcommands for manage messages :\n"+
 				"\u00A7B(number)\t\u00A7F : View message by number, from current page\n"+
 				"\u00A7Bdelete [messages]\t\u00A7F : Move [messages] or current one to trash\n"+
-				"\u00A7B\u00A7L.. \t\u00A7F: Back to last cached folder page\n"+
+				"\u00A7B\u00A7L.. \t\u00A7F: Back to current folder page\n"+
 				"\u00A7F* [messages] = Message numbers separated by spaces\n"+
 				"\u00A7EMenu : \t"+
 				"\u00A7B<<`first page`/mail help 1\t\u00A7B < `previous page`/mail help 1\t"+

@@ -104,7 +104,6 @@ public final class Main extends JavaPlugin implements Listener
 		case "ra":
 			ma.reply(sender, arg);
 			return true;
-			
 		}
 		
 		// check possible number entered (read message by id), or unrecognized sub command

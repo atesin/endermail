@@ -4,15 +4,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+
+import com.avaje.ebeaninternal.server.subclass.GetterSetterMethods;
 
 public class MailAgent
 {
@@ -27,7 +31,6 @@ public class MailAgent
 	private int expire;
 	// last folder index, last page viewed, last message index
 	private Map<String, int[]> views = new HashMap<String, int[]>();
-	//private String[] f = new String[]{"inbox", "sent", "trash"};
 	private Map<String, BukkitTask> cleanViewsTasks = new HashMap<String, BukkitTask>();
 	private Map<String, Map<Integer, Integer>> idMaps = new HashMap<String, Map<Integer, Integer>>();
 	private TablePrinter table = new TablePrinter("", 8, -3, 16, 29, 1, -4);
@@ -43,7 +46,6 @@ public class MailAgent
 		expire =  main.getConfig().getInt("expire");
 		db = new DataBase(main);
 		ce = new ChatEvents(main, this, expire);
-		//is = new ItemSender();
 	}
 	
 	// REGULAR METHODS
@@ -55,13 +57,23 @@ public class MailAgent
 		{
 			// send queued items before and take note of free space
 			String user = sender instanceof Player ? sender.getName() : "ADMIN";
-			int unread = db.getInt("SELECT COUNT(muser) FROM endermail_folders WHERE muser='"+user+"' AND folder=0 AND unread=1;", null);
+			
+			// connect database and get unread mail count
+			Statement sta = db.newStatement();
+			int unread = db.getInt("SELECT COUNT(muser) FROM endermail_folders WHERE muser='"+user+"' AND folder=0 AND unread=1;", sta);
+			
+			// send notifications accordin the case
 			if (unread != 0)
 				sender.sendMessage("\u00A7EYou have "+unread+" unread mail messages");
 			else if (!quiet)
 				sender.sendMessage("\u00A7BYou have no unread mail messages");
 			if (sender instanceof Player && ((Player) sender).getEnderChest().firstEmpty() < 0)
 				sender.sendMessage("\u00A7EWarning: your enderchest is full.");
+
+			// welcome message, based in the fact folders never can get full emptied
+			if (quiet && main.getConfig().getBoolean("welcomeMessage.enabled") && db.getInt("SELECT COUNT(muser) FROM endermail_folders WHERE muser='"+user+"';", sta) < 1)
+				welcome(user);
+			db.closeStatement(sta);
 		}
 	}
 	
@@ -119,6 +131,12 @@ public class MailAgent
 	// get message entered from ms chat area and deliver
 	String deliver(List<String> draft)
 	{
+		return deliver(draft, true);
+	}
+	
+	// above method written for convenience with other methods but welcome()
+	String deliver(List<String> draft, boolean store)
+	{
 		// sender had regret
 		if (draft == null)
 			return "\u00A7ECancelled by user.";
@@ -132,7 +150,7 @@ public class MailAgent
 		for(int i = 5; i < draft.size(); ++i)
 		{	
 			msg += "\n"+draft.get(i);
-			if (brief.length() < 30)
+			if (brief.length() < 40)
 				brief += draft.get(i)+" ";
 		}
 		
@@ -145,7 +163,7 @@ public class MailAgent
 		}
 		
 		// add headers to message
-		brief = brief.substring(0, Math.min(30, brief.length())).replaceAll("'", "''");
+		brief = brief.substring(0, Math.min(40, brief.length())).replaceAll("'", "''");
 		msg =
 			"From: "+draft.get(0)+
 			"\nTo: "+draft.get(1)+
@@ -179,7 +197,9 @@ public class MailAgent
 		}
 		
 		// store sent mail with valid recipients, for reference and future replyall, and return
-		db.getResult("INSERT INTO endermail_folders VALUES ('"+draft.get(0)+"', 1, 0, "+id+");", sta);
+		if (store)
+			db.getResult("INSERT INTO endermail_folders VALUES ('"+draft.get(0)+"', 1, 0, "+id+");", sta);
+		
 		db.closeStatement(sta);
 		return "\u00A7BMessage sent to valid recipients: "+draft.get(1);
 	}
@@ -353,13 +373,24 @@ public class MailAgent
 			"\u00A7B REply `\u00A77/mail reply...`/mail reply\t"+
 			"\u00A7B ReplyAll `\u00A77/mail replyall...`/mail replyall\t"+
 			"\u00A7B ForWard... `\u00A77/mail forward \u00A7Dplayer1,player2...`/mail forward `\t"+
-			"\u00A77:\t\u00A7B Delete `send to trash`/mail del\t"+
+			"\u00A77:\t\u00A7B Delete `send to trash`/mail delete\t"+
 			"\u00A7B SendMail... `\u00A77/mail sendmail \u00A7Dplayer1,player2... \u00A7Bsubject ...`/mail sendmail `\t\u00A77:\t\u00A7B Help `help`/mail help");
 	}
 	
 	void delete(CommandSender sender, String... args)
 	{
+		// previous checks
 		String user = sender instanceof Player ? sender.getName() : "ADMIN";
+		if (!idMaps.containsKey(user))
+		{
+			sender.sendMessage("\u00A7DI forgot the folder you were browsing, browse again.");
+			return;
+		}
+		if (views.get(user)[0] != 0)
+		{
+			sender.sendMessage("\u00A7DI just can delete messages from inbox.");
+			return;
+		}
 		
 		// with no arguments try to get last readed mail
 		if (args.length == 1)
@@ -375,12 +406,6 @@ public class MailAgent
 		}
 		
 		// try to find specified mail ids
-		if (!idMaps.containsKey(user))
-		{
-			sender.sendMessage("\u00A7DI forgot the folder you were browsing, browse again.");
-			return;
-		}
-		
 		int index;
 		Map<Integer, Integer> map = idMaps.get(user);
 		
@@ -547,4 +572,23 @@ public class MailAgent
 		return String.format("%ds", age);
 	}
 	
+	private void welcome(String user)
+	{
+		// execute previous command
+		if (main.getConfig().contains("welcomeMessage.executeCommand"))
+			main.getServer().dispatchCommand(main.getServer().getConsoleSender(), main.getConfig().getString("welcomeMessage.executeCommand").replaceAll("%P", user));
+		
+		// build draft: from, rcpt, subj, quote, attachment, body lines...
+		List<String> draft = new ArrayList<String>();
+		draft.add("ADMIN");
+		draft.add(user);
+		draft.add(main.getConfig().getString("welcomeMessage.subject").replaceAll("%P", user));
+		draft.add("");
+		draft.add("");
+		for (String line : main.getConfig().getString("welcomeMessage.body").replaceAll("%P", user).split("\n"))
+			draft.add(line);
+		
+		// send welcome message
+		deliver(draft, false);
+	}
 }

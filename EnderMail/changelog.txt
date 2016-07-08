@@ -1,9 +1,15 @@
-v7 (development)
+v8 (development)
 
-v6 (latest release)
+v7 (current release)
+
+- welcome mail support
+- fixed delete bug in message menu
+- minor enhancements
+
+v6
 
 - minor changes and interface dialog additions
-- fix "async player kick exception" bug that prints a "+" sign when sending attachments
+- fix "async player kick" exception bug that prints a "+" sign when sending attachments
 - fix undo past first line bug
 
 v5

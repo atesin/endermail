@@ -70,13 +70,13 @@ public class ChatEvents implements Listener
 			"\u00A7B + `attach held item and send mail`+\t\u00A7E: attach,\t"+
 			"\u00A7B z `discard last line`+\t\u00A7E: undo,\t"+
 			"\u00A7B c `cancel and return to chat`c\t\u00A7E: cancel");
-		List<String> body = new ArrayList<String>();
-		body.add(sender instanceof Player ? sender.getName() : "ADMIN");
-		body.add(recipients);
-		body.add(subject);
-		body.add(quote);
-		body.add("");
-		drafts.put(sender instanceof Player ? sender.getName() : "ADMIN", body);
+		List<String> draft = new ArrayList<String>();
+		draft.add(sender instanceof Player ? sender.getName() : "ADMIN");
+		draft.add(recipients);
+		draft.add(subject);
+		draft.add(quote);
+		draft.add("");
+		drafts.put(sender instanceof Player ? sender.getName() : "ADMIN", draft);
 		resetExpire(sender);
 	}
 	
