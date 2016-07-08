@@ -1,13 +1,12 @@
 # 
 # EnderMail installation:
 # 
-# - Requires AuthMe working with MySQL, a plugin like this would have no sense without authentication
-# - Create EnderMail tables in same database as AuthMe for access on querying existing users
-# - Copy MySQL AuthMe configurations to datasource section below in this file for same reason
-# - Edit this line in AuthMe config.yml to do a mail check on players login:
-# 
-# forceCommands: [mail check quiet]
-# 
+# - Requires AuthMe reloaded working with MySQL, this plugin relies on external authentication
+# - To allow querying existing users, copy MySQL AuthMe configurations to DataSource section below in this file
+# - Create EnderMail tables in same database as AuthMe, according recent configured parameters
+# - Edit the line shown below in AuthMe config.yml to do unread mail and welcome message checks on player login:
+#     forceCommands: [mail check quiet]
+# - Once configurations were done in both plugins, restart the server
 # 
 # MySQL tables creation:
 # 
@@ -49,7 +48,7 @@ expire: 2400
 
 
 # welcome message, from admin to new players with no messages in any folder (some folders cannot be emptied)
-# available variable: %P = new player, requires the forceCommands configuration specified on top to work
+# available variable: %P = new player, triggered on login so requires proper installation documented on top
 welcomeMessage:
   # if not enabled this entire section will be skipped
   enabled: false
