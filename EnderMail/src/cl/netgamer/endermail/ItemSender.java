@@ -10,8 +10,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import com.mojang.authlib.GameProfile;
 
 public class ItemSender
@@ -37,11 +35,12 @@ public class ItemSender
 			playerInteractManagerClass = Class.forName("net.minecraft.server."+version+".PlayerInteractManager");
 			entityPlayerClass = Class.forName("net.minecraft.server."+version+".EntityPlayer");
 			minecraftServerInstance = minecraftServerClass.getMethod("getServer").invoke(Bukkit.getServer());
-			worldServerInstance = minecraftServerClass.getMethod("getWorldServer", int.class).invoke(minecraftServerInstance, 0);
+			Object overworld = Class.forName("net.minecraft.server."+version+".DimensionManager").getField("OVERWORLD").get(null);
+			worldServerInstance = minecraftServerClass.getMethod("getWorldServer", overworld.getClass()).invoke(minecraftServerInstance, overworld);
 			playerInteractManagerInstance = playerInteractManagerClass.getConstructor(worldClass).newInstance(worldServerInstance);
 			entityPlayerConstructor = entityPlayerClass.getConstructor(minecraftServerClass, worldServerInstance.getClass(), GameProfile.class, playerInteractManagerClass);
 		}
-		catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | InstantiationException e)
+		catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | InstantiationException | NoSuchFieldException e)
 		{
 			e.printStackTrace();
 		}

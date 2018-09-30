@@ -1,5 +1,10 @@
 # 
-# EnderMail installation:
+# EnderMail:
+#
+# - Easy and powerful ingame mail system plugin with offline attachment support,
+# - Get more info at the project page: https://dev.bukkit.org/projects/endermail
+# 
+# Installation:
 # 
 # - Requires AuthMe reloaded working with MySQL, this plugin relies on external authentication
 # - To allow querying existing users, copy MySQL AuthMe configurations to DataSource section below in this file

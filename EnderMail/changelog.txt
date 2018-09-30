@@ -1,6 +1,13 @@
-v8 (development)
+v9 (development)
 
-v7 (current release)
+- to do
+
+v8 (current release)
+
+- asynchronous mass email for admin
+- add cb 1.13.x support (updated worlds iteration)
+
+v7
 
 - welcome mail support
 - fixed delete bug in message menu

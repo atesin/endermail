@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import com.avaje.ebeaninternal.server.subclass.GetterSetterMethods;
+//import com.avaje.ebeaninternal.server.subclass.GetterSetterMethods;
 
 public class MailAgent
 {
